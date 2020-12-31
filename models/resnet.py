@@ -78,7 +78,7 @@ class ResNet:
             x = tf.layers.batch_normalization(x)
 
         # max pooling layer with kernel 3x3, strides 2
-        x = tf.nn.max_pool(x, ksize=3, strides=2, padding='SAME')
+        # x = tf.nn.max_pool(x, ksize=3, strides=2, padding='SAME')
 
         ########################################################################################################
 

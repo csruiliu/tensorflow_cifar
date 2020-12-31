@@ -2,6 +2,7 @@ import tensorflow as tf
 import argparse
 
 from models.resnet import ResNet
+from models.densenet import DenseNet
 from tools.dataset_loader import load_cifar10_keras
 
 
@@ -27,10 +28,12 @@ if __name__ == "__main__":
     # load cifar10 dataset
     train_feature, train_label, eval_feature, eval_label = load_cifar10_keras()
 
+    # load CNN model
+    model = ResNet(residual_layer=18, num_classes=10)
+    # model = DenseNet(residual_layer=121, num_classes=10)
+
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
-
-    model = ResNet(50, 10)
 
     logit = model.build(feature_ph)
     train_op = model.train(logit, label_ph, opt, lr)
@@ -43,6 +46,7 @@ if __name__ == "__main__":
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
         num_batch = train_label.shape[0] // batch_size
+        rest_feature = train_label.shape[0] - batch_size * num_batch
 
         for e in range(num_epoch):
             for i in range(num_batch):
@@ -53,6 +57,11 @@ if __name__ == "__main__":
                 train_feature_batch = train_feature[batch_offset:batch_end]
                 train_label_batch = train_label[batch_offset:batch_end]
                 sess.run(train_op, feed_dict={feature_ph: train_feature_batch, label_ph: train_label_batch})
+
+            print('the rest train feature: {}, train if it exists'.format(rest_feature))
+            rest_feature_batch = train_feature[-rest_feature:]
+            rest_label_batch = train_label[-rest_feature:]
+            sess.run(train_op, feed_dict={feature_ph: rest_feature_batch, label_ph: rest_label_batch})
 
         acc_avg = sess.run(eval_op, feed_dict={feature_ph: eval_feature, label_ph: eval_label})
 
