@@ -1,1 +1,1 @@
-# tensorflow-cifar10
+# Train CNN models with CIFAR10 on TensorFlow #
