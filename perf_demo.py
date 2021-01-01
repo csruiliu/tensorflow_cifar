@@ -68,10 +68,11 @@ if __name__ == "__main__":
                 print('no train feature left for this epoch')
 
         acc_sum = 0
-        num_batch_eval = eval_feature.shape[0] // 50
+        eval_batch_size = 50
+        num_batch_eval = eval_label.shape[0] // eval_batch_size
         for i in range(num_batch_eval):
-            batch_offset = i * batch_size
-            batch_end = (i + 1) * batch_size
+            batch_offset = i * eval_batch_size
+            batch_end = (i + 1) * eval_batch_size
             eval_feature_batch = eval_feature[batch_offset:batch_end]
             eval_label_batch = eval_label[batch_offset:batch_end]
             acc_batch = sess.run(eval_op, feed_dict={feature_ph: eval_feature_batch, label_ph: eval_label_batch})
