@@ -24,15 +24,15 @@ class ResNet:
             if down_sample:
                 x = tf.layers.conv2d(block_input, filters, 3, strides=2, padding='same', use_bias=False)
                 shortcut = tf.layers.conv2d(block_input, filters, 1, strides=2, padding='same', use_bias=False)
-                shortcut = tf.layers.batch_normalization(shortcut)
+                shortcut = tf.layers.batch_normalization(shortcut, training=True)
             else:
                 x = tf.layers.conv2d(block_input, filters, 3, strides=1, padding='same', use_bias=False)
-                shortcut = tf.layers.batch_normalization(block_input)
+                shortcut = tf.layers.batch_normalization(block_input, training=True)
 
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
             x = tf.nn.relu(x)
             x = tf.layers.conv2d(x, filters, 3, strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
             layer = tf.nn.relu(x + shortcut)
 
         return layer
@@ -53,14 +53,14 @@ class ResNet:
                 shortcut = tf.layers.conv2d(block_input, filters*expansion, kernel_size=1,
                                             strides=1, padding='same', use_bias=False)
 
-            shortcut = tf.layers.batch_normalization(shortcut)
-            x = tf.layers.batch_normalization(x)
+            shortcut = tf.layers.batch_normalization(shortcut, training=True)
+            x = tf.layers.batch_normalization(x, training=True)
             x = tf.nn.relu(x)
             x = tf.layers.conv2d(x, filters, kernel_size=3, strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
             x = tf.nn.relu(x)
             x = tf.layers.conv2d(x, filters*expansion, kernel_size=1, strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
             layer = tf.nn.relu(x + shortcut)
 
         return layer
@@ -75,7 +75,7 @@ class ResNet:
 
         with tf.variable_scope('conv_1'):
             x = tf.layers.conv2d(model_input, filters=64, kernel_size=3, strides=1)
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
 
         # max pooling layer with kernel 3x3, strides 2
         # x = tf.nn.max_pool(x, ksize=3, strides=2, padding='SAME')
