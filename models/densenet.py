@@ -20,11 +20,11 @@ class DenseNet:
 
     def dense_bottleneck(self, layer_input, scope='bottleneck'):
         with tf.variable_scope(scope):
-            x = tf.layers.batch_normalization(layer_input)
+            x = tf.layers.batch_normalization(layer_input, training=True)
             x = tf.nn.relu(x)
             x = tf.layers.conv2d(x, filters=self.growth_rate, kernel_size=1,
                                  strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x)
+            x = tf.layers.batch_normalization(x, training=True)
             x = tf.nn.relu(x)
             layer = tf.layers.conv2d(x, filters=self.growth_rate, kernel_size=3,
                                      strides=1, padding='same', use_bias=False)
@@ -33,7 +33,7 @@ class DenseNet:
 
     def dense_block(self, block_input, dn_layers, scope='dense_blk'):
         with tf.variable_scope(scope):
-            x = tf.layers.batch_normalization(block_input)
+            x = tf.layers.batch_normalization(block_input, training=True)
             block_input = tf.concat(values=[block_input, x], axis=3)
             for i in range(dn_layers-1):
                 block = self.dense_bottleneck(block_input, scope='bottleneck_'+str(i))
@@ -43,7 +43,7 @@ class DenseNet:
 
     def transition_block(self, block_input, scope='trans_blk'):
         with tf.variable_scope(scope):
-            block = tf.layers.batch_normalization(block_input)
+            block = tf.layers.batch_normalization(block_input, training=True)
             block = tf.layers.conv2d(block, filters=self.growth_rate, kernel_size=1,
                                      strides=1, padding='same', use_bias=False)
             block = tf.layers.average_pooling2d(block, pool_size=2, strides=2, padding='same')
