@@ -48,6 +48,7 @@ if __name__ == "__main__":
         num_batch = train_label.shape[0] // batch_size
         rest_feature = train_label.shape[0] - batch_size * num_batch
 
+        # train the model
         for e in range(num_epoch):
             for i in range(num_batch):
                 print('epoch %d / %d, step %d / %d' % (e + 1, num_epoch, i + 1, num_batch))
@@ -66,6 +67,16 @@ if __name__ == "__main__":
             else:
                 print('no train feature left for this epoch')
 
-        acc_avg = sess.run(eval_op, feed_dict={feature_ph: eval_feature, label_ph: eval_label})
+        acc_sum = 0
+        num_batch_eval = eval_feature.shape[0] // 50
+        for i in range(num_batch_eval):
+            batch_offset = i * batch_size
+            batch_end = (i + 1) * batch_size
+            eval_feature_batch = eval_feature[batch_offset:batch_end]
+            eval_label_batch = eval_label[batch_offset:batch_end]
+            acc_batch = sess.run(eval_op, feed_dict={feature_ph: eval_feature_batch, label_ph: eval_label_batch})
+            acc_sum += acc_batch
+
+        acc_avg = acc_sum / num_batch_eval
 
     print('evaluation accuracy:{}'.format(acc_avg))
