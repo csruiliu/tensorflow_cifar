@@ -27,10 +27,10 @@ class ResNet:
                 shortcut = tf.layers.batch_normalization(block_input, training=True)
 
             x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
+            x = tf.keras.activations.relu(x)
             x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
-            layer = tf.nn.relu(x + shortcut)
+            layer = tf.keras.activations.relu(x + shortcut)
 
         return layer
 
@@ -51,16 +51,16 @@ class ResNet:
                                                   padding='same', use_bias=False)(block_input)
 
             x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
+            x = tf.keras.activations.relu(x)
             x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1,
                                        padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
+            x = tf.keras.activations.relu(x)
             x = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1,
                                        padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
             shortcut = tf.layers.batch_normalization(shortcut, training=True)
-            layer = tf.nn.relu(x + shortcut)
+            layer = tf.keras.activations.relu(x + shortcut)
 
         return layer
 

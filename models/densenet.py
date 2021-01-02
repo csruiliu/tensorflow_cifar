@@ -18,11 +18,11 @@ class DenseNet:
     def dense_bottleneck(self, layer_input, scope='bottleneck'):
         with tf.variable_scope(scope):
             x = tf.layers.batch_normalization(layer_input, training=True)
-            x = tf.nn.relu(x)
+            x = tf.keras.activations.relu(x)
             x = tf.keras.layers.Conv2D(filters=self.growth_rate, kernel_size=1,
                                        strides=1, padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
+            x = tf.keras.activations.relu(x)
             layer = tf.keras.layers.Conv2D(filters=self.growth_rate, kernel_size=3,
                                            strides=1, padding='same', use_bias=False)(x)
 
