@@ -7,13 +7,10 @@ class ResNet:
         self.residual_layer_list = list()
         self.output_classes = num_classes
 
-        self.train_op = None
-        self.eval_op = None
-
     def fc_layer(self, layer_input, scope='fc'):
         with tf.variable_scope(scope):
-            layer = tf.layers.flatten(layer_input)
-            layer = tf.layers.dense(layer, units=self.output_classes)
+            layer = tf.keras.layers.Flatten(layer_input)
+            layer = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(layer)
 
         return layer
 
@@ -22,16 +19,16 @@ class ResNet:
     def residual_block(block_input, filters, down_sample=False, block_name='conv'):
         with tf.variable_scope(block_name):
             if down_sample:
-                x = tf.layers.conv2d(block_input, filters, 3, strides=2, padding='same', use_bias=False)
-                shortcut = tf.layers.conv2d(block_input, filters, 1, strides=2, padding='same', use_bias=False)
+                x = tf.keras.layers.Conv2D(filters, 3, strides=2, padding='same', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters, 1, strides=2, padding='same', use_bias=False)(block_input)
                 shortcut = tf.layers.batch_normalization(shortcut, training=True)
             else:
-                x = tf.layers.conv2d(block_input, filters, 3, strides=1, padding='same', use_bias=False)
+                x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(block_input)
                 shortcut = tf.layers.batch_normalization(block_input, training=True)
 
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.nn.relu(x)
-            x = tf.layers.conv2d(x, filters, 3, strides=1, padding='same', use_bias=False)
+            x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
             layer = tf.nn.relu(x + shortcut)
 
@@ -43,24 +40,26 @@ class ResNet:
         expansion = 4
         with tf.variable_scope(block_name):
             if down_sample:
-                x = tf.layers.conv2d(block_input, filters, kernel_size=1,
-                                     strides=2, padding='same', use_bias=False)
-                shortcut = tf.layers.conv2d(block_input, filters*expansion, kernel_size=1,
-                                            strides=2, padding='same', use_bias=False)
+                x = tf.keras.layers.Conv2D(filters, kernel_size=1, strides=2,
+                                           padding='same', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=2,
+                                                  padding='same', use_bias=False)(block_input)
             else:
-                x = tf.layers.conv2d(block_input, filters, kernel_size=1,
-                                     strides=1, padding='same', use_bias=False)
-                shortcut = tf.layers.conv2d(block_input, filters*expansion, kernel_size=1,
-                                            strides=1, padding='same', use_bias=False)
+                x = tf.keras.layers.Conv2D(filters, kernel_size=1, strides=1,
+                                           padding='same', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1,
+                                                  padding='same', use_bias=False)(block_input)
 
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.nn.relu(x)
+            x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1,
+                                       padding='same', use_bias=False)(x)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.nn.relu(x)
+            x = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1,
+                                       padding='same', use_bias=False)(x)
+            x = tf.layers.batch_normalization(x, training=True)
             shortcut = tf.layers.batch_normalization(shortcut, training=True)
-            x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
-            x = tf.layers.conv2d(x, filters, kernel_size=3, strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x, training=True)
-            x = tf.nn.relu(x)
-            x = tf.layers.conv2d(x, filters*expansion, kernel_size=1, strides=1, padding='same', use_bias=False)
-            x = tf.layers.batch_normalization(x, training=True)
             layer = tf.nn.relu(x + shortcut)
 
         return layer
@@ -74,7 +73,8 @@ class ResNet:
         self.get_residual_layer()
 
         with tf.variable_scope('conv_1'):
-            x = tf.layers.conv2d(model_input, filters=64, kernel_size=3, strides=1)
+            x = tf.keras.layers.Conv2D(filters=64, kernel_size=3, strides=1,
+                                       padding='same', use_bias=False)(model_input)
             x = tf.layers.batch_normalization(x, training=True)
 
         # max pooling layer with kernel 3x3, strides 2
@@ -115,31 +115,6 @@ class ResNet:
         model = self.fc_layer(x)
 
         return model
-
-    def train(self, model, train_labels, opt, lr):
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(train_labels, model)
-        cross_entropy_cost = tf.reduce_mean(cross_entropy)
-        reg_loss = tf.losses.get_regularization_loss()
-        train_loss = cross_entropy_cost + reg_loss
-
-        if opt == 'Adam':
-            self.train_op = tf.train.AdamOptimizer(lr).minimize(train_loss)
-        elif opt == 'SGD':
-            self.train_op = tf.train.GradientDescentOptimizer(lr).minimize(train_loss)
-        elif opt == 'Adagrad':
-            self.train_op = tf.train.AdagradOptimizer(lr).minimize(train_loss)
-        elif opt == 'Momentum':
-            self.train_op = tf.train.MomentumOptimizer(lr, 0.9).minimize(train_loss)
-        else:
-            raise ValueError('Optimizer is not recognized')
-
-        return self.train_op
-
-    def evaluate(self, model, eval_labels):
-        prediction = tf.equal(tf.argmax(model, -1), tf.argmax(eval_labels, -1))
-        self.eval_op = tf.reduce_mean(tf.cast(prediction, tf.float32))
-
-        return self.eval_op
 
     def get_residual_layer(self):
         if self.residual_layer == 18:

@@ -4,9 +4,6 @@ import tensorflow as tf
 class MobileNetV2:
     def __init__(self, num_classes):
         self.output_classes = num_classes
-        self.train_op = None
-        self.eval_op = None
-
         self.block_arch = [(1, 32, 16, 1, 1),
                            (6, 16, 24, 2, 1),  # NOTE: change stride 2 -> 1 for CIFAR10
                            (6, 24, 32, 3, 2),
@@ -60,33 +57,7 @@ class MobileNetV2:
         x = tf.layers.batch_normalization(x, training=True)
         x = tf.nn.relu6(x)
         #x = tf.keras.layers.AveragePooling2D(pool_size=(4, 4))(x)
-        x = tf.layers.flatten(x)
-        model = tf.layers.dense(x, units=self.output_classes)
+        x = tf.keras.layers.Flatten()(x)
+        model = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(x)
+
         return model
-
-    def train(self, model, train_labels, opt, lr):
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(train_labels, model)
-        cross_entropy_cost = tf.reduce_mean(cross_entropy)
-        reg_loss = tf.losses.get_regularization_loss()
-        train_loss = cross_entropy_cost + reg_loss
-
-        if opt == 'Adam':
-            self.train_op = tf.train.AdamOptimizer(lr).minimize(train_loss)
-        elif opt == 'SGD':
-            self.train_op = tf.train.GradientDescentOptimizer(lr).minimize(train_loss)
-        elif opt == 'Adagrad':
-            self.train_op = tf.train.AdagradOptimizer(lr).minimize(train_loss)
-        elif opt == 'Momentum':
-            self.train_op = tf.train.MomentumOptimizer(lr, 0.9).minimize(train_loss)
-        else:
-            raise ValueError('Optimizer is not recognized')
-
-        return self.train_op
-
-    def evaluate(self, model, eval_labels):
-        prediction = tf.equal(tf.argmax(model, -1), tf.argmax(eval_labels, -1))
-        self.eval_op = tf.reduce_mean(tf.cast(prediction, tf.float32))
-
-        return self.eval_op
-
-
