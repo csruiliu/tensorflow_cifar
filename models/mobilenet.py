@@ -4,7 +4,7 @@ import tensorflow as tf
 class MobileNet:
     def __init__(self, num_classes):
         self.output_classes = num_classes
-        # (32, 64, 2, 1) denotes filter_in 32, filter_out 64, strides 2, repeat 1
+        # (64, 2, 1) denotes filter 64, strides 2, repeat 1
         self.block_arch = [(32, 1, 1),
                            (24, 2, 1),
                            (128, 1, 1),
