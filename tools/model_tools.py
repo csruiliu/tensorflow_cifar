@@ -8,16 +8,16 @@ def train_model(model, train_labels, opt='Momentum', lr=0.1):
     # reg_loss = tf.losses.get_regularization_loss()
     # train_loss = cross_entropy_cost + reg_loss
 
+    tf.trainable_variables()
+
     if opt == 'Adam':
-        train_op = tf.keras.optimizers.Adam(lr).minimize(train_loss)
+        train_op = tf.train.AdamOptimizer(lr).minimize(train_loss)
     elif opt == 'SGD':
-        train_op = tf.keras.optimizers.SGD(lr).minimize(train_loss)
+        train_op = tf.train.GradientDescentOptimizer(lr).minimize(train_loss)
     elif opt == 'Adagrad':
-        train_op = tf.keras.optimizers.Adagrad(lr).minimize(train_loss)
-    elif opt == 'Adamax':
-        train_op = tf.keras.optimizers.Adamax(lr).minimize(train_loss)
+        train_op = tf.train.AdagradOptimizer(lr).minimize(train_loss)
     elif opt == 'Momentum':
-        train_op = tf.keras.optimizers.SGD(lr, 0.9).minimize(train_loss)
+        train_op = tf.train.MomentumOptimizer(lr, 0.9).minimize(train_loss)
     else:
         raise ValueError('Optimizer is not recognized')
 

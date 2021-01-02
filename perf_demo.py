@@ -17,7 +17,7 @@ if __name__ == "__main__":
     parser.add_argument('-b', '--batchsize', action='store', type=int,
                         help='set the training batch size')
     parser.add_argument('-o', '--opt', action='store', type=str,
-                        choices=['Adam', 'SGD', 'Adagrad', 'Momentum', 'Adamax'],
+                        choices=['Adam', 'SGD', 'Adagrad', 'Momentum'],
                         help='set the training optimizer')
     parser.add_argument('-r', '--lr', action='store', type=float,
                         help='set the learning rate')
