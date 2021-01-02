@@ -3,6 +3,7 @@ import argparse
 
 from models.resnet import ResNet
 from models.densenet import DenseNet
+from models.mobilenet_v2 import MobileNetV2
 from tools.dataset_loader import load_cifar10_keras
 
 
@@ -30,7 +31,8 @@ if __name__ == "__main__":
 
     # load CNN model
     # model = ResNet(residual_layer=18, num_classes=10)
-    model = DenseNet(residual_layer=121, num_classes=10)
+    # model = DenseNet(residual_layer=121, num_classes=10)
+    model = MobileNetV2(num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
@@ -38,7 +40,7 @@ if __name__ == "__main__":
     logit = model.build(feature_ph)
     train_op = model.train(logit, label_ph, opt, lr)
     eval_op = model.evaluate(logit, label_ph)
-    
+
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.allow_soft_placement = True
