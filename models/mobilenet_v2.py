@@ -56,7 +56,7 @@ class MobileNetV2:
                 in_filter = out_filter
 
         x = tf.keras.layers.Conv2D(filters=1280, kernel_size=1, strides=1,
-                                   padding='same', use_bias=False)(x)
+                                   padding='valid', use_bias=False)(x)
         x = tf.layers.batch_normalization(x, training=True)
         x = tf.nn.relu6(x)
         #x = tf.keras.layers.AveragePooling2D(pool_size=(4, 4))(x)
