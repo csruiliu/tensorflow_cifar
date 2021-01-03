@@ -20,14 +20,14 @@ class ResNet:
         with tf.variable_scope(block_name):
             if down_sample:
                 x = tf.keras.layers.Conv2D(filters, 3, strides=2, padding='same', use_bias=False)(block_input)
-                shortcut = tf.keras.layers.Conv2D(filters, 1, strides=2, padding='valid', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters, 1, strides=2, use_bias=False)(block_input)
                 shortcut = tf.layers.batch_normalization(shortcut, training=True)
             else:
                 x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(block_input)
                 shortcut = block_input
-
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
+
             x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
             layer = tf.keras.activations.relu(x + shortcut)
@@ -46,8 +46,7 @@ class ResNet:
             if down_sample:
                 x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=2,
                                            padding='same', use_bias=False)(x)
-                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=2,
-                                                  padding='same', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=2, use_bias=False)(block_input)
             else:
                 x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1,
                                            padding='same', use_bias=False)(x)
@@ -59,7 +58,10 @@ class ResNet:
             x = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
 
-            shortcut = tf.layers.batch_normalization(shortcut, training=True)
+            if shortcut.shape[-1] != x.shape[-1]:
+                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1, use_bias=False)(x)
+                shortcut = tf.layers.batch_normalization(shortcut, training=True)
+
             layer = tf.keras.activations.relu(x + shortcut)
 
         return layer
