@@ -54,7 +54,7 @@ if __name__ == "__main__":
     config.allow_soft_placement = True
 
     # load cifar10 dataset
-    train_feature, train_label, eval_feature, eval_label = load_cifar10_keras(0)
+    train_feature, train_label, eval_feature, eval_label = load_cifar10_keras()
 
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
@@ -64,6 +64,7 @@ if __name__ == "__main__":
 
         # train the model
         for e in range(num_epoch):
+            # shuffle the training data
             shf_indices = np.arange(num_feature)
             np.random.shuffle(shf_indices)
             train_feature = train_feature[shf_indices]
