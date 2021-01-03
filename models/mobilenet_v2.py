@@ -12,6 +12,13 @@ class MobileNetV2:
                            (6, 96, 160, 3, 2),
                            (6, 160, 320, 1, 1)]
 
+    def fc_layer(self, layer_input, scope='fc'):
+        with tf.variable_scope(scope):
+            layer = tf.keras.layers.Flatten()(layer_input)
+            layer = tf.keras.layers.Dense(units=self.output_classes)(layer)
+
+        return layer
+
     @staticmethod
     def bottleneck_block(block_input,
                          filters_in,
@@ -42,9 +49,11 @@ class MobileNetV2:
         return layer
 
     def build(self, model_input):
-        x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1,
-                                   padding='same', use_bias=False)(model_input)
-        x = tf.layers.batch_normalization(x, training=True)
+        with tf.variable_scope('conv_0'):
+            x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1,
+                                       padding='same', use_bias=False)(model_input)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x, max_value=6)
 
         for bid, [expansion, in_filter, out_filter, num_block, strides] in enumerate(self.block_arch):
             for i in range(num_block):
@@ -52,12 +61,12 @@ class MobileNetV2:
                                           scope='bottleneck_'+str(bid)+'_'+str(i))
                 in_filter = out_filter
 
-        x = tf.keras.layers.Conv2D(filters=1280, kernel_size=1, strides=1,
-                                   padding='valid', use_bias=False)(x)
-        x = tf.layers.batch_normalization(x, training=True)
-        x = tf.keras.activations.relu(x, max_value=6)
+        with tf.variable_scope('conv_1'):
+            x = tf.keras.layers.Conv2D(filters=1280, kernel_size=1, strides=1,
+                                       padding='valid', use_bias=False)(x)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x, max_value=6)
 
-        x = tf.keras.layers.Flatten()(x)
-        model = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(x)
+        model = self.fc_layer(x, scope='fc')
 
         return model

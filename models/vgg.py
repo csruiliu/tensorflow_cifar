@@ -17,6 +17,13 @@ class VGG:
 
         self.output_classes = num_classes
 
+    def fc_layer(self, layer_input, scope='fc'):
+        with tf.variable_scope(scope):
+            layer = tf.keras.layers.Flatten()(layer_input)
+            layer = tf.keras.layers.Dense(units=self.output_classes)(layer)
+
+        return layer
+
     def build(self, model_input):
         x = model_input
         for bid, [filters, num_layer] in enumerate(self.conv_layer_list):
@@ -29,7 +36,6 @@ class VGG:
             x = tf.keras.layers.MaxPool2D(pool_size=2, strides=2)(x)
 
         # x = tf.keras.layers.AveragePooling2D(pool_size=1, strides=1)(x)
-        x = tf.keras.layers.Flatten()(x)
-        model = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(x)
+        model = self.fc_layer(x, scope='fc')
 
         return model

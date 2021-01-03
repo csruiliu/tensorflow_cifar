@@ -11,7 +11,7 @@ class DenseNet:
     def fc_layer(self, layer_input, scope='fc'):
         with tf.variable_scope(scope):
             layer = tf.keras.layers.Flatten()(layer_input)
-            layer = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(layer)
+            layer = tf.keras.layers.Dense(units=self.output_classes)(layer)
 
         return layer
 
@@ -55,12 +55,12 @@ class DenseNet:
                                        strides=1, padding='same', use_bias=False)(model_input)
             # x = tf.layers.average_pooling2d(x, pool_size=3, strides=2, padding='same')
 
-            for lidx, lnum in enumerate(self.residual_layer_list):
-                x = self.dense_block(x, dn_layers=lnum, scope='dense_blk_'+str(lidx))
-                x = self.transition_block(x, scope='trans_blk'+str(lidx))
+        for lidx, lnum in enumerate(self.residual_layer_list):
+            x = self.dense_block(x, dn_layers=lnum, scope='dense_blk_'+str(lidx))
+            x = self.transition_block(x, scope='trans_blk'+str(lidx))
 
-            x = tf.keras.layers.GlobalAveragePooling2D()(x)
-            model = self.fc_layer(x)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        model = self.fc_layer(x, scope='fc')
 
         return model
 

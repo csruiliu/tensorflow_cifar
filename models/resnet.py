@@ -10,7 +10,7 @@ class ResNet:
     def fc_layer(self, layer_input, scope='fc'):
         with tf.variable_scope(scope):
             layer = tf.keras.layers.Flatten()(layer_input)
-            layer = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(layer)
+            layer = tf.keras.layers.Dense(units=self.output_classes)(layer)
 
         return layer
 

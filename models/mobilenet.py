@@ -34,12 +34,20 @@ class MobileNet:
 
         return layer
 
+    def fc_layer(self, layer_input, scope='fc'):
+        with tf.variable_scope(scope):
+            layer = tf.keras.layers.Flatten()(layer_input)
+            layer = tf.keras.layers.Dense(units=self.output_classes)(layer)
+
+        return layer
+
     def build(self, model_input):
-        # Change strides to 2 for CIFAR10
-        x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1,
-                                   padding='same', use_bias=False)(model_input)
-        x = tf.layers.batch_normalization(x, training=True)
-        x = tf.keras.activations.relu(x)
+        with tf.variable_scope('conv_0'):
+            # Change strides to 2 for CIFAR10
+            x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1,
+                                       padding='same', use_bias=False)(model_input)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x)
 
         for bid, [filters, strides, num_block] in enumerate(self.block_arch):
             for i in range(num_block):
@@ -47,7 +55,6 @@ class MobileNet:
 
         # x = tf.keras.layers.AveragePooling2D(pool_size=1)(x)
 
-        x = tf.keras.layers.Flatten()(x)
-        model = tf.keras.layers.Dense(units=self.output_classes, use_bias=False)(x)
+        model = self.fc_layer(x, scope='fc')
 
         return model
