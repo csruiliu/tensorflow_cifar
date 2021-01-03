@@ -32,9 +32,6 @@ if __name__ == "__main__":
     lr = args.lr
     num_epoch = args.epoch
 
-    # load cifar10 dataset
-    train_feature, train_label, eval_feature, eval_label = load_cifar10_keras()
-
     # load CNN model
     # model = ResNet(residual_layer=18, num_classes=10)
     # model = DenseNet(residual_layer=121, num_classes=10)
@@ -54,6 +51,9 @@ if __name__ == "__main__":
     config.gpu_options.allow_growth = True
     config.allow_soft_placement = True
 
+    # load cifar10 dataset
+    train_feature, train_label, eval_feature, eval_label = load_cifar10_keras(0)
+
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
         num_batch = train_label.shape[0] // batch_size
@@ -61,6 +61,7 @@ if __name__ == "__main__":
 
         # train the model
         for e in range(num_epoch):
+            train_feature, train_label, _, _ = load_cifar10_keras(e+1)
             for i in range(num_batch):
                 print('epoch %d / %d, step %d / %d' % (e + 1, num_epoch, i + 1, num_batch))
 
