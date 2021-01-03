@@ -6,6 +6,7 @@ from models.densenet import DenseNet
 from models.mobilenet_v2 import MobileNetV2
 from models.mobilenet import MobileNet
 from models.vgg import VGG
+from models.lenet import LeNet
 
 from tools.dataset_loader import load_cifar10_keras
 from tools.model_tools import train_model
@@ -39,7 +40,8 @@ if __name__ == "__main__":
     # model = DenseNet(residual_layer=121, num_classes=10)
     # model = MobileNetV2(num_classes=10)
     # model = MobileNet(num_classes=10)
-    model = VGG(conv_layer=16, num_classes=10)
+    # model = VGG(conv_layer=16, num_classes=10)
+    model = LeNet(num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
