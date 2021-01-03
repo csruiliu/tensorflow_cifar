@@ -20,11 +20,11 @@ class ResNet:
         with tf.variable_scope(block_name):
             if down_sample:
                 x = tf.keras.layers.Conv2D(filters, 3, strides=2, padding='same', use_bias=False)(block_input)
-                shortcut = tf.keras.layers.Conv2D(filters, 1, strides=2, padding='same', use_bias=False)(block_input)
+                shortcut = tf.keras.layers.Conv2D(filters, 1, strides=2, padding='valid', use_bias=False)(block_input)
                 shortcut = tf.layers.batch_normalization(shortcut, training=True)
             else:
                 x = tf.keras.layers.Conv2D(filters, 3, strides=1, padding='same', use_bias=False)(block_input)
-                shortcut = tf.layers.batch_normalization(block_input, training=True)
+                shortcut = block_input
 
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
@@ -39,26 +39,26 @@ class ResNet:
     def residual_bottleneck(block_input, filters, down_sample=False, block_name='conv'):
         expansion = 4
         with tf.variable_scope(block_name):
+            x = tf.keras.layers.Conv2D(filters, kernel_size=1, use_bias=False)(block_input)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x)
+
             if down_sample:
-                x = tf.keras.layers.Conv2D(filters, kernel_size=1, strides=2,
-                                           padding='same', use_bias=False)(block_input)
+                x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=2,
+                                           padding='same', use_bias=False)(x)
                 shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=2,
                                                   padding='same', use_bias=False)(block_input)
             else:
-                x = tf.keras.layers.Conv2D(filters, kernel_size=1, strides=1,
-                                           padding='same', use_bias=False)(block_input)
-                shortcut = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1,
-                                                  padding='same', use_bias=False)(block_input)
+                x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1,
+                                           padding='same', use_bias=False)(x)
+                shortcut = block_input
 
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
-            x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1,
-                                       padding='same', use_bias=False)(x)
+
+            x = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
-            x = tf.keras.activations.relu(x)
-            x = tf.keras.layers.Conv2D(filters*expansion, kernel_size=1, strides=1,
-                                       padding='same', use_bias=False)(x)
-            x = tf.layers.batch_normalization(x, training=True)
+
             shortcut = tf.layers.batch_normalization(shortcut, training=True)
             layer = tf.keras.activations.relu(x + shortcut)
 
@@ -76,6 +76,7 @@ class ResNet:
             x = tf.keras.layers.Conv2D(filters=64, kernel_size=3, strides=1,
                                        padding='same', use_bias=False)(model_input)
             x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x)
 
         # max pooling layer with kernel 3x3, strides 2
         # x = tf.nn.max_pool(x, ksize=3, strides=2, padding='SAME')
