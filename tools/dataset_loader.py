@@ -16,7 +16,7 @@ def normalize(x_train, x_test):
     return x_train, x_test
 
 
-def load_cifar10_keras(seed):
+def load_cifar10_keras():
     (train_data, train_labels), (test_data, test_labels) = cifar10.load_data()
     # train_data = train_data / 255.0
     # test_data = test_data / 255.0
@@ -25,10 +25,6 @@ def load_cifar10_keras(seed):
 
     train_labels = to_categorical(train_labels, 10)
     test_labels = to_categorical(test_labels, 10)
-
-    np.random.seed(seed)
-    np.random.shuffle(train_data)
-    np.random.shuffle(train_labels)
 
     return train_data, train_labels, test_data, test_labels
 

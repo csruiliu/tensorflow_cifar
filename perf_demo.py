@@ -1,5 +1,6 @@
 import tensorflow as tf
 import argparse
+import numpy as np
 
 from models.resnet import ResNet
 from models.densenet import DenseNet
@@ -14,6 +15,7 @@ from tools.model_tools import evaluate_model
 
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-b', '--batchsize', action='store', type=int,
@@ -33,12 +35,12 @@ if __name__ == "__main__":
     num_epoch = args.epoch
 
     # load CNN model
-    # model = ResNet(residual_layer=18, num_classes=10)
+    model = ResNet(residual_layer=18, num_classes=10)
     # model = DenseNet(residual_layer=121, num_classes=10)
     # model = MobileNetV2(num_classes=10)
     # model = MobileNet(num_classes=10)
     # model = VGG(conv_layer=16, num_classes=10)
-    model = LeNet(num_classes=10)
+    # model = LeNet(num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
@@ -56,12 +58,17 @@ if __name__ == "__main__":
 
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
-        num_batch = train_label.shape[0] // batch_size
-        rest_feature = train_label.shape[0] - batch_size * num_batch
+        num_feature = train_label.shape[0]
+        num_batch = num_feature // batch_size
+        rest_feature = num_feature - batch_size * num_batch
 
         # train the model
         for e in range(num_epoch):
-            train_feature, train_label, _, _ = load_cifar10_keras(e+1)
+            shf_indices = np.arange(num_feature)
+            np.random.shuffle(shf_indices)
+            train_feature = train_feature[shf_indices]
+            train_label = train_label[shf_indices]
+
             for i in range(num_batch):
                 print('epoch %d / %d, step %d / %d' % (e + 1, num_epoch, i + 1, num_batch))
 
