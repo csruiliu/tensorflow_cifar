@@ -89,10 +89,12 @@ if __name__ == "__main__":
             else:
                 print('no train feature left for this epoch')
 
+        print('start evaluation phrase')
         acc_sum = 0
         eval_batch_size = 50
         num_batch_eval = eval_label.shape[0] // eval_batch_size
         for i in range(num_batch_eval):
+            print('evaluation step %d / %d' % (i + 1, num_batch_eval))
             batch_offset = i * eval_batch_size
             batch_end = (i + 1) * eval_batch_size
             eval_feature_batch = eval_feature[batch_offset:batch_end]
