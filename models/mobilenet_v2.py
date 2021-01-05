@@ -34,8 +34,7 @@ class MobileNetV2:
             x = tf.keras.activations.relu(x, max_value=6)
             x = tf.keras.layers.SeparableConv2D(filters=filters_out, kernel_size=3, strides=strides,
                                                 padding='same', use_bias=False)(x)
-            x = tf.layers.batch_normalization(x, training=True)
-            layer = tf.keras.activations.relu(x, max_value=6)
+            layer = tf.layers.batch_normalization(x, training=True)
 
             if strides == 1:
                 shortcut = tf.keras.layers.Conv2D(filters_out, kernel_size=1, strides=1,
