@@ -22,13 +22,8 @@ class MobileNet:
                         scope):
 
         with tf.variable_scope(scope):
-            x = tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=strides,
+            x = tf.keras.layers.SeparableConv2D(filters=filters, kernel_size=3, strides=strides,
                                                 padding='same', use_bias=False)(block_input)
-            x = tf.layers.batch_normalization(x, training=True)
-            x = tf.keras.activations.relu(x)
-
-            x = tf.keras.layers.Conv2D(filters, kernel_size=1, strides=1,
-                                       padding='valid', use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
             layer = tf.keras.activations.relu(x)
 
