@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-class GoogLeNet:
+class Inception:
     def __init__(self, num_classes):
         self.output_classes = num_classes
 

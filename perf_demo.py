@@ -8,7 +8,7 @@ from models.mobilenet_v2 import MobileNetV2
 from models.mobilenet import MobileNet
 from models.vgg import VGG
 from models.lenet import LeNet
-from models.googlenet import GoogLeNet
+from models.inception import Inception
 from models.alexnet import AlexNet
 
 from tools.dataset_loader import load_cifar10_keras
