@@ -40,8 +40,8 @@ if __name__ == "__main__":
     # load CNN model
     # model = ResNet(residual_layer=18, num_classes=10)
     # model = DenseNet(residual_layer=121, num_classes=10)
-    # model = MobileNetV2(num_classes=10)
-    model = MobileNet(num_classes=10)
+    model = MobileNetV2(num_classes=10)
+    # model = MobileNet(num_classes=10)
     # model = VGG(conv_layer=16, num_classes=10)
     # model = LeNet(num_classes=10)
     # model = Inception(num_classes=10)
