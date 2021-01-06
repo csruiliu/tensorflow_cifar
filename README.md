@@ -30,7 +30,6 @@ The implementations of MobileNetV2 basically follow the architecture proposed in
 
 The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed architecture of the original [paper](https://arxiv.org/abs/1512.03385). To fit the CIFAR-10, I slightly modify the kernel size of `conv_1` from 7x7 to 3x3 and omit the first 3x3 max pooling layer. 
 
-
 ## ResNeXt ##
 
 The implementations of ResNeXt follow the proposed architecture of the original [paper](https://arxiv.org/pdf/1611.05431.pdf). Specifically, I follow the original implemention of ResNeXt on CIFAR-10, ResNeXt-29.  
@@ -39,4 +38,6 @@ The implementations of ResNeXt follow the proposed architecture of the original 
 
 The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf).
 
+## Xception ##
 
+The imlementation of Xception basically follows the architecture proposed in the [paper](https://arxiv.org/pdf/1610.02357.pdf). However, to fit CIFAR-10, I remove the front conv layer and all max pooling layer, and change the stride of shortcut layers to 1x1.   
