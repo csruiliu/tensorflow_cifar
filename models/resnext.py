@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorlayer as tl
 
 
 class ResNeXt:
@@ -24,43 +25,26 @@ class ResNeXt:
             x = tf.keras.layers.Conv2D(filters=group_width, kernel_size=1, use_bias=False)(block_input)
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
-
-            if x.shape[-1] % self.card == 0:
-                group_conv_filter = x.shape[-1] // self.card
-                group_conv_list = list()
-                for i in range(self.card):
-                    group_conv_input = x[:, :, :, i*group_conv_filter:(i+1)*group_conv_filter]
-                    out = tf.keras.layers.Conv2D(filters=group_conv_filter, kernel_size=3,
-                                                 strides=strides, padding='same', use_bias=False)(group_conv_input)
-                    group_conv_list.append(out)
-
-                x = tf.concat(group_conv_list, axis=3)
-            else:
-                group_conv_filter = x.shape[-1] // self.card
-                group_conv_list = list()
-                for i in range(self.card-1):
-                    group_conv_input = x[:, :, :, i * group_conv_filter:(i + 1) * group_conv_filter]
-                    out = tf.keras.layers.Conv2D(filters=group_conv_filter, kernel_size=3,
-                                                 strides=strides, padding='same', use_bias=False)(group_conv_input)
-                    group_conv_list.append(out)
-
-                rest_conv_filter = x.shape[-1] % self.card
-                group_conv_input = x[:, :, :, -rest_conv_filter]
+            '''
+            x = tf.keras.layers.Conv2D(filters=group_width, kernel_size=3, strides=strides,
+                                       groups=self.card, padding='same', use_bias=False)(x)
+            '''
+            x = tl.layers.GroupConv2d(prev_layer=tl.layers.InputLayer(x), n_filter=group_width, filter_size=(3, 3),
+                                      strides=(strides,strides), n_group=self.card, padding='SAME', b_init=None)
+            '''
+            group_conv_filter = x.shape[-1] // self.card
+            group_conv_list = list()
+            for i in range(self.card):
+                group_conv_input = x[:, :, :, i*group_conv_filter:(i+1)*group_conv_filter]
                 out = tf.keras.layers.Conv2D(filters=group_conv_filter, kernel_size=3,
                                              strides=strides, padding='same', use_bias=False)(group_conv_input)
                 group_conv_list.append(out)
 
-                x = tf.concat(group_conv_list, axis=3)
-
-            x = tf.layers.batch_normalization(x, training=True)
-            x = tf.keras.activations.relu(x)
-
-            x = tf.keras.layers.Conv2D(filters=expansion*group_width, kernel_size=1, use_bias=False)(x)
-            x = tf.layers.batch_normalization(x, training=True)
-
+            x = tf.concat(group_conv_list, axis=3)
+            '''
+            x = x.outputs
             if shortcut.shape[-1] != x.shape[-1]:
-                shortcut = tf.keras.layers.Conv2D(expansion*group_width, kernel_size=1,
-                                                  strides=1, use_bias=False)(shortcut)
+                shortcut = tf.keras.layers.Conv2D(group_width, kernel_size=1, strides=1, use_bias=False)(shortcut)
                 shortcut = tf.layers.batch_normalization(shortcut, training=True)
 
             layer = tf.keras.activations.relu(x + shortcut)
