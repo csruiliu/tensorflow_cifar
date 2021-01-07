@@ -12,6 +12,7 @@ from models.inception import Inception
 from models.alexnet import AlexNet
 from models.resnext import ResNeXt
 from models.xception import Xception
+from models.squeezenet import SqueezeNet
 
 from tools.dataset_loader import load_cifar10_keras
 from tools.model_tools import train_model
@@ -48,7 +49,8 @@ if __name__ == "__main__":
     # model = Inception(num_classes=10)
     # model = AlexNet(num_classes=10)
     # model = ResNeXt(cardinality=8, bottleneck_width=64, num_classes=10)
-    model = Xception(num_classes=10)
+    # model = Xception(num_classes=10)
+    model = SqueezeNet(num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
