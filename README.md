@@ -34,6 +34,10 @@ The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed archite
 
 The implementations of ResNeXt follow the proposed architecture of the original [paper](https://arxiv.org/pdf/1611.05431.pdf). Specifically, I follow the original implemention of ResNeXt on CIFAR-10, ResNeXt-29.  
 
+## SqueezeNet ##
+
+The imlementations of SqueezeNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1602.07360.pdf). I slightly change the strides of the first conv layer to 2. SqueezeNet can use a small amount of parameters to achieve an acceptable accuracy.
+
 ## VGG ##
 
 The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf).
