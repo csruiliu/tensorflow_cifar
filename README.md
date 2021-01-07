@@ -4,7 +4,7 @@ All the models are tested on TensorFlow 1.15 and should be compatible with TF 1.
 
 ## AlexNet ##
 
-The implementation of AlexNet follows the architecture proposed in the [paper](https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf). To fit the CIFAR-10, I modify the filters and kernel size of conv layer, for example, the filters and kernel of the first conv layer is changed to 64 and 3. Also, the current hardware offering is powerful enough, so the original two GPUs version's AlexNet is usually implemented in a unified fashion. ***AlexNet won the ImageNet 2012 contest (Classification and Localization)， it is the first time to apply CNN to a large scale dataset, and the eye-catching results significantly promoted the development of CNN***
+The implementation of AlexNet follows the architecture proposed in the [paper](https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf). The current hardware offering is powerful enough, so the original two GPUs version's AlexNet is usually implemented in a unified fashion. ***AlexNet won the ImageNet 2012 contest (Classification and Localization)， it is the first time to apply CNN to a large scale dataset, and the eye-catching results significantly promoted the development of CNN***
 
 ## DenseNet ##
 
@@ -28,7 +28,7 @@ The implementations of MobileNetV2 basically follow the architecture proposed in
 
 ## ResNet ##
 
-The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed architecture of the original [paper](https://arxiv.org/abs/1512.03385). To fit the CIFAR-10, I slightly modify the kernel size of `conv_1` from 7x7 to 3x3 and omit the first 3x3 max pooling layer. ***ResNet is a champion of the ImageNet 2015 (Classification and Localization), it first introduced residual block with shortcut connection to increase the model depth.***
+The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed architecture of the original [paper](https://arxiv.org/abs/1512.03385). To fit the CIFAR-10, I slightly modify the kernel size of `conv_1` from 7x7 to 3x3 and omit the first 3x3 max pooling layer. ***ResNet is the champion of the ImageNet 2015 (Classification and Localization), it first introduced residual block with shortcut connection to increase the model depth.***
 
 ## ResNeXt ##
 
@@ -36,12 +36,16 @@ The implementations of ResNeXt follow the proposed architecture of the original 
 
 ## SqueezeNet ##
 
-The imlementations of SqueezeNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1602.07360.pdf). I slightly change the strides of the first conv layer to 2. SqueezeNet can use a small amount of parameters to achieve an acceptable accuracy. 
+The imlementations of SqueezeNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1602.07360.pdf). I slightly change the strides of the first conv layer to 2. ***Many CNN models focused on improving accuracy, SqueezeNet was proposed to achieve an acceptable accuracy but use a small amount of parameters. So, it took the size side of a trade-off between accuracy and size.***
 
 ## VGG ##
 
-The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf). ***VGG is a champion of the ImageNet 2014 (Localization) and a runner-up of the ImageNet 2014 (Classification). It is a simple but practical deep learning model, and its results showed that a deeper model could achieve a better performance and illustrated the importance of small conv kernel.***
+The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf). ***VGG is the champion of the ImageNet 2014 (Localization) and a runner-up of the ImageNet 2014 (Classification). It is a simple but practical deep learning model, and its results showed that a deeper model could achieve a better performance and illustrated the importance of small conv kernel.***
 
 ## Xception ##
 
 The imlementation of Xception basically follows the architecture proposed in the [paper](https://arxiv.org/pdf/1610.02357.pdf). However, to fit CIFAR-10, I remove the front conv layer and all max pooling layer, and change the stride of shortcut layers to 1x1. ***Xception is similar to MobileNet and promotes the development of Depthwise Conv + Pointwise Conv.***
+
+## ZFNet ##
+
+The imlementation of ZFNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1311.2901.pdf). ZFNet had the same architecture as AlexNet but used smaller conv kernels and strides for the first two conv layers. ***ZFNet is the champion of the ImageNet 2013. The key contribution is to visualize the CNN.*** 
