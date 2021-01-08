@@ -13,7 +13,7 @@ class VGG:
         elif conv_layer == 19:
             self.conv_layer_list = [[64, 2], [128, 2], [256, 4], [512, 4], [512, 4]]
         else:
-            raise ValueError('[DenseNet] number of residual layer is invalid, try 121, 169, 201, 264')
+            raise ValueError('[VGG] number of residual layer is invalid, try 121, 169, 201, 264')
 
         self.output_classes = num_classes
 
