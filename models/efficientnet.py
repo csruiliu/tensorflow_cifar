@@ -60,7 +60,7 @@ class EfficientNet:
             layer = tf.layers.batch_normalization(x, training=True)
 
             if strides == 1 and in_filters == out_filters:
-                dropout = tf.keras.layers.Dropout(rate=0.2)(x)
+                dropout = tf.keras.layers.Dropout(rate=0.2)(layer)
                 layer = layer + dropout
 
         return layer
@@ -76,6 +76,9 @@ class EfficientNet:
                 x = self.mbconv_block(x, expansion, in_filters, out_filters,
                                       kernel_size, strides, scope='mbc_'+str(bid)+'_'+str(i))
 
+        x = tf.keras.layers.Conv2D(filters=1280, kernel_size=1, use_bias=False)(x)
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.Dropout(rate=0.2)(x)
         model = self.fc_layer(x, scope='fc')
 
         return model

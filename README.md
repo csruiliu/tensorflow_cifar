@@ -10,6 +10,10 @@ The implementation of AlexNet follows the architecture proposed in the [paper](h
 
 The implementations of DenseNet [121, 169, 201, 264] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1608.06993.pdf). To fit the CIFAR-10, I slightly modify the kernel size of the front convolutional layer from 7x7 to 3x3, and omit the first 3x3 max pooling layer. ***DenseNet paper won the CVPR 2017 best paper. Its idea is to strengthen the feature reuse (any two specific layers can communicate through a shortcut).***
 
+## EfficientNet ##
+
+The implementations of EfficientNet follows the architecture of EfficientNetB0 proposed in [paper](https://arxiv.org/pdf/1905.11946.pdf). ***It attempted to find a sweet spot in the tradeoff between accuracy and model size***.
+
 ## Inception ## 
 
 The implementation of Inception (aka GoogLeNet, Inception-V1) follows the architecture presented in the [paper](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf). I remove the front 7x7 conv layer and 3x3 max pooling layer to fit CIFAR-10. ***GoogLeNet won the ImageNet 2014 contest (Classification and Dection). Its inception unit consists of parallel several conv layers, which can reduce the model size without hurting accuracy. It shows that mutiple small conv kernel can achieve the similar performance of a big conv kernel in a way.***
