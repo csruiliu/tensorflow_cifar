@@ -4,7 +4,7 @@ All the models are tested on TensorFlow 1.15 and should be compatible with TF 1.
 
 ## AlexNet ##
 
-The implementation of AlexNet follows the architecture proposed in the [paper](https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf). The current hardware offering is powerful enough, so the original two GPUs version's AlexNet is usually implemented in a unified fashion. ***AlexNet won the ImageNet 2012 contest (Classification and Localization)， it is the first time to apply CNN to a large scale dataset, and the eye-catching results significantly promoted the development of CNN***
+The implementation of AlexNet follows the architecture proposed in the [paper](https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf). The current hardware offering is powerful enough, so the original two GPUs version's AlexNet is usually implemented in a unified fashion. ***AlexNet won the ImageNet 2012 contest (Classification and Localization), it is the first time to apply CNN to a large scale dataset, and the eye-catching results significantly promoted the development of CNN***
 
 ## DenseNet ##
 
@@ -12,7 +12,7 @@ The implementations of DenseNet [121, 169, 201, 264] follow the architecture pro
 
 ## EfficientNet ##
 
-The implementations of EfficientNet follows the architecture of EfficientNetB0 proposed in [paper](https://arxiv.org/pdf/1905.11946.pdf). ***It proposed a compound scaling method that uses a compound coefficient φ to uniformly scales network width, depth, and resolution in a principled way.Essentially, EfficientNet attempted to find a sweet spot in the tradeoff between accuracy and model size***. 
+The implementations of EfficientNet follows the architecture of EfficientNetB0 proposed in [paper](https://arxiv.org/pdf/1905.11946.pdf). ***It proposed a compound scaling method that uses a compound coefficient φ to uniformly scales network width, depth, and resolution in a principled way. Essentially, EfficientNet attempted to find a sweet spot in the tradeoff between accuracy and model size***. 
 
 ## Inception ## 
 
