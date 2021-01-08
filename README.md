@@ -12,7 +12,7 @@ The implementations of DenseNet [121, 169, 201, 264] follow the architecture pro
 
 ## EfficientNet ##
 
-The implementations of EfficientNet follows the architecture of EfficientNetB0 proposed in [paper](https://arxiv.org/pdf/1905.11946.pdf). ***It attempted to find a sweet spot in the tradeoff between accuracy and model size***.
+The implementations of EfficientNet follows the architecture of EfficientNetB0 proposed in [paper](https://arxiv.org/pdf/1905.11946.pdf). ***It proposed a compound scaling method that uses a compound coefficient φ to uniformly scales network width, depth, and resolution in a principled way.Essentially, EfficientNet attempted to find a sweet spot in the tradeoff between accuracy and model size***. 
 
 ## Inception ## 
 
