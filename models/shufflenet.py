@@ -60,19 +60,6 @@ class ShuffleNet:
                 shortcut = block_input
 
             if use_groups:
-                x = tf.keras.layers.Conv2D(filters=mid_filters, kernel_size=1, use_bias=False)(block_input)
-                x = tf.layers.batch_normalization(x, training=True)
-                x = tf.keras.activations.relu(x)
-
-                x = tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=blk_strides,
-                                                    padding='same', use_bias=False)(x)
-                x = tf.layers.batch_normalization(x, training=True)
-                x = tf.keras.activations.relu(x)
-
-                x = tf.keras.layers.Conv2D(filters=out_filters, kernel_size=1, use_bias=False)(x)
-                x = tf.layers.batch_normalization(x, training=True)
-
-            else:
                 x = self.group_conv(block_input, filters=mid_filters, kernel_size=1, strides=1,
                                     padding='valid', groups=self.groups, use_bias=False)
                 x = tf.layers.batch_normalization(x, training=True)
@@ -86,6 +73,19 @@ class ShuffleNet:
 
                 x = self.group_conv(x, filters=out_filters, kernel_size=1, strides=1,
                                     padding='valid', groups=self.groups, use_bias=False)
+                x = tf.layers.batch_normalization(x, training=True)
+
+            else:
+                x = tf.keras.layers.Conv2D(filters=mid_filters, kernel_size=1, use_bias=False)(block_input)
+                x = tf.layers.batch_normalization(x, training=True)
+                x = tf.keras.activations.relu(x)
+
+                x = tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=blk_strides,
+                                                    padding='same', use_bias=False)(x)
+                x = tf.layers.batch_normalization(x, training=True)
+                x = tf.keras.activations.relu(x)
+
+                x = tf.keras.layers.Conv2D(filters=out_filters, kernel_size=1, use_bias=False)(x)
                 x = tf.layers.batch_normalization(x, training=True)
 
             if down_sample:
@@ -112,6 +112,7 @@ class ShuffleNet:
             x = tf.keras.layers.Conv2D(filters=24, kernel_size=3, strides=2, use_bias=False)(model_input)
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
+            # x = tf.keras.layers.MaxPool2D(pool_size=3, stride=2, padding='same')(x)
 
         with tf.variable_scope('stage_2'):
             x = self.bottleneck(x, out_filters=self.out_filters[0], use_groups=False, down_sample=True, scope='blk_0')
