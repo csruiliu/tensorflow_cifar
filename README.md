@@ -40,7 +40,11 @@ The implementations of ResNeXt follow the proposed architecture of the original 
 
 ## ShuffleNet ##
 
-The imlementations of ShuffleNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1707.01083.pdf). ***The key idea is channel shuffle, which is designed for communication between the grouped channels. BTW, it a relatively lightweight model.*** 
+The imlementations of ShuffleNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1707.01083.pdf), but omits the max pooling layer. ***ShuffleNet is designed for mobile devices with very limited computing power (like MobileNet). The key ideas are pointwise group convolu and channel shuffle. The former can reduce computation complexity of 1x1 convolutions (a costly operation in CNN), the latter allows each group conv gets input from the other groups so that the information can flow across feature channels.*** 
+
+## ShuffleNet V2 ##
+
+The imlementations of ShuffleNet V2 follows the architecture proposed in the [paper](https://arxiv.org/pdf/1807.11164.pdf), but omits the max pooling layer. ***ShuffleNet V2 claimed that we should use the direct metric (actual runtime on target platform) rather than the indirect metric to compute model complexities. It also proposed 4 principles for designing models. G1. Equal channel width minimizes memory access cost; G2. Excessive group convolution increases MAC; G3. Network fragmentation reduces degree of parallelism; G4. Element-wise operations (ReLu, Add, etc) are non-negligible.*** 
 
 ## SqueezeNet ##
 
