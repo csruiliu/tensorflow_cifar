@@ -30,10 +30,11 @@ class ResNeXt:
             '''
 
             group_conv_filter = x.shape[-1] // self.card
+            output_group_filter = group_width // self.card
             group_conv_list = list()
             for i in range(self.card):
                 group_conv_input = x[:, :, :, i*group_conv_filter:(i+1)*group_conv_filter]
-                out = tf.keras.layers.Conv2D(filters=group_conv_filter, kernel_size=3,
+                out = tf.keras.layers.Conv2D(filters=output_group_filter, kernel_size=3,
                                              strides=strides, padding='same', use_bias=False)(group_conv_input)
                 group_conv_list.append(out)
 
