@@ -16,6 +16,7 @@ from models.squeezenet import SqueezeNet
 from models.zfnet import ZFNet
 from models.efficientnet import EfficientNet
 from models.shufflenet import ShuffleNet
+from models.shufflenet_v2 import ShuffleNetV2
 
 from tools.dataset_loader import load_cifar10_keras
 from tools.model_tools import train_model
@@ -56,7 +57,8 @@ if __name__ == "__main__":
     # model = Xception(num_classes=10)
     # model = SqueezeNet(num_classes=10)
     # model = EfficientNet(num_classes=10)
-    model = ShuffleNet(num_groups=2, num_classes=10)
+    # model = ShuffleNet(num_groups=2, num_classes=10)
+    model = ShuffleNetV2(complexity=1, num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
