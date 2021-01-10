@@ -16,7 +16,7 @@ The implementations of EfficientNet follows the architecture of EfficientNetB0 p
 
 ## Inception ## 
 
-The implementation of Inception (aka GoogLeNet, Inception-V1) follows the architecture presented in the [paper](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf). I remove the front 7x7 conv layer and 3x3 max pooling layer to fit CIFAR-10. ***GoogLeNet won the ImageNet 2014 contest (Classification and Dection). Its inception unit consists of parallel several conv layers, which can reduce the model size without hurting accuracy. It shows that mutiple small conv kernel can achieve the similar performance of a big conv kernel in a way.***
+The implementation of Inception (aka GoogLeNet, Inception-V1) follows the architecture presented in the [paper](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf). I remove the front 7x7 conv layer and 3x3 max pooling layer to fit CIFAR-10. ***GoogLeNet won the ImageNet 2014 contest (Classification and Detection). Its inception unit consists of parallel several conv layers, which can reduce the model size without hurting accuracy. It shows that multiple small conv kernels can achieve similar performance to a big conv kernel in a way.***
 
 ## LeNet ## 
 
@@ -24,27 +24,31 @@ The implementation of LeNet (aka LeNet-5) follows the architecture presented in 
 
 ## MobileNet ##
 
-The implementations of MobileNet basically follows the architecture proposed in the [paper](https://arxiv.org/pdf/1704.04861.pdf). I slightly modify the strides of the front conv2d layer to 1 and remove the avgpool 7x7 layer. ***MobileNet is designed for mobile applications so its size has to be small enough. The key idea in MobileNet is the depthwise separable convolution***
+The implementations of MobileNet basically follows the architecture proposed in the [paper](https://arxiv.org/pdf/1704.04861.pdf). I slightly modify the strides of the front conv2d layer to 1 and remove the avgpool 7x7 layer. ***MobileNet is designed for mobile applications so its size has to be small enough. The key idea in MobileNet is the depthwise separable convolution.***
 
 ## MobileNet V2 ##
 
-The implementations of MobileNetV2 basically follow the architecture proposed in the [paper](https://arxiv.org/pdf/1801.04381.pdf). To fit the CIFAR-10, I slightly modify the strides of the front conv2d layer to 1, the strides of the second bottleneck to 1. The avgpool 7x7 has been omitted. ***The successor of MobileNet, the key contribution of V2 is Inverted Residual Block***
+The implementations of MobileNetV2 basically follow the architecture proposed in the [paper](https://arxiv.org/pdf/1801.04381.pdf). To fit the CIFAR-10, I slightly modify the strides of the front conv2d layer to 1, the strides of the second bottleneck to 1. The avgpool 7x7 has been omitted. ***The successor of MobileNet, the key contribution of V2 is the Inverted Residual Block.***
 
 ## ResNet ##
 
-The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed architecture of the original [paper](https://arxiv.org/abs/1512.03385). To fit the CIFAR-10, I slightly modify the kernel size of `conv_1` from 7x7 to 3x3 and omit the first 3x3 max pooling layer. ***ResNet is the champion of the ImageNet 2015 (Classification and Localization), it first introduced residual block with shortcut connection to increase the model depth.***
+The implementations of ResNet [18, 34, 50, 101, 152] follow the proposed architecture of the original [paper](https://arxiv.org/abs/1512.03385). To fit the CIFAR-10, I slightly modify the kernel size of `conv_1` from 7x7 to 3x3 and omit the first 3x3 max pooling layer. ***ResNet is the champion of the ImageNet 2015 (Classification and Localization), which first introduced residual block with shortcut connection to increase the model depth.***
 
 ## ResNeXt ##
 
-The implementations of ResNeXt follow the proposed architecture of the original [paper](https://arxiv.org/pdf/1611.05431.pdf). Specifically, I follow the original implemention of ResNeXt on CIFAR-10, ResNeXt-29. ***ResNeXt is the runner-up of the ImageNet 2016 (Classification). It takes advantage of grouped convolution and abstracted a patern of split-transform-merge.***
+The implementations of ResNeXt follow the proposed architecture of the original [paper](https://arxiv.org/pdf/1611.05431.pdf). Specifically, I follow the original implemention of ResNeXt on CIFAR-10, ResNeXt-29. ***ResNeXt is the runner-up of the ImageNet 2016 (Classification). It takes advantage of grouped convolution and abstracted a pattern of split-transform-merge.***
+
+## ShuffleNet ##
+
+The imlementations of ShuffleNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1707.01083.pdf). ***The key idea is channel shuffle, which is designed for communication between the grouped channels. BTW, it a relatively lightweight model.*** 
 
 ## SqueezeNet ##
 
-The imlementations of SqueezeNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1602.07360.pdf). I slightly change the strides of the first conv layer to 2. ***Many CNN models focused on improving accuracy, SqueezeNet was proposed to achieve an acceptable accuracy but use a small amount of parameters. So, it took the size side of a trade-off between accuracy and size.***
+The imlementations of SqueezeNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1602.07360.pdf). I slightly change the strides of the first conv layer to 2. ***Many CNN models focused on improving accuracy, SqueezeNet was proposed to achieve an acceptable accuracy but use a small number of parameters. So, it took the size side of a trade-off between accuracy and size.***
 
 ## VGG ##
 
-The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf). ***VGG is the champion of the ImageNet 2014 (Localization) and a runner-up of the ImageNet 2014 (Classification). It is a simple but practical deep learning model, and its results showed that a deeper model could achieve a better performance and illustrated the importance of small conv kernel.***
+The imlementations of VGG [11, 13, 16, 19] follow the architecture proposed in the [paper](https://arxiv.org/pdf/1409.1556.pdf). ***VGG is the champion of the ImageNet 2014 (Localization) and a runner-up of the ImageNet 2014 (Classification). It is a simple but practical deep learning model, and its results showed that a deeper model could achieve better performance and illustrated the importance of a small conv kernel.***
 
 ## Xception ##
 
