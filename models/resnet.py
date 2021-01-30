@@ -68,12 +68,12 @@ class ResNet:
         return layer
 
     def build(self, model_input):
+        self.get_residual_layer()
+
         if self.residual_layer < 50:
             block = self.residual_block
         else:
             block = self.residual_bottleneck
-
-        self.get_residual_layer()
 
         with tf.variable_scope('conv_1'):
             x = tf.keras.layers.Conv2D(filters=64, kernel_size=3, strides=1,
