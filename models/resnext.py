@@ -16,7 +16,7 @@ class ResNeXt:
         elif self.card == 32:
             self.width = 4
         else:
-            raise ValueError('[ResNeXt] cardinality is invalid, try 1, 2, 4, 8, 14')
+            raise ValueError('[ResNeXt] cardinality is invalid, try 1, 2, 4, 8, 32')
 
         self.output_classes = num_classes
 
