@@ -14,7 +14,7 @@ class ShuffleNet:
         elif num_groups == 8:
             self.out_filters = [384, 768, 1536]
         else:
-            raise ValueError('[ShuffleNet] number of residual layer is invalid, try 121, 169, 201, 264')
+            raise ValueError('[ShuffleNet] number of conv group is invalid, try 2, 3, 4, 8')
 
     @staticmethod
     def group_conv(layer_input,
