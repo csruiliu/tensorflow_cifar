@@ -132,4 +132,4 @@ class ResNet:
         elif self.residual_layer == 152:
             self.residual_layer_list = [3, 8, 36, 3]
         else:
-            raise ValueError('[ResNet] residual layer is invalid')
+            raise ValueError('[ResNet] residual layer is invalid, try 18, 34, 50, 101, 152')
