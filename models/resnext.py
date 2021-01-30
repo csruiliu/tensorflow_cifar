@@ -2,9 +2,22 @@ import tensorflow as tf
 
 
 class ResNeXt:
-    def __init__(self, cardinality, bottleneck_width, num_classes):
+    def __init__(self, cardinality, num_classes):
         self.card = cardinality
-        self.width = bottleneck_width
+
+        if self.card == 1:
+            self.width = 64
+        elif self.card == 2:
+            self.width = 40
+        elif self.card == 4:
+            self.width = 24
+        elif self.card == 8:
+            self.width = 14
+        elif self.card == 32:
+            self.width = 4
+        else:
+            raise ValueError('[ResNet] residual layer is invalid, try 18, 34, 50, 101, 152')
+
         self.output_classes = num_classes
 
     def res_block(self, block_input, down_sample=False, scope='block'):

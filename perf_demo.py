@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # model = Inception(num_classes=10)
     # model = AlexNet(num_classes=10)
     # model = ZFNet(num_classes=10)
-    # model = ResNeXt(cardinality=8, bottleneck_width=64, num_classes=10)
+    # model = ResNeXt(cardinality=8, num_classes=10)
     # model = Xception(num_classes=10)
     # model = SqueezeNet(num_classes=10)
     # model = EfficientNet(num_classes=10)
