@@ -3,6 +3,7 @@ import numpy as np
 from keras.datasets import cifar10
 from keras.utils import to_categorical
 
+
 ########################################################
 # read cifar-10 data using keras
 ########################################################
