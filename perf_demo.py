@@ -18,7 +18,7 @@ from models.efficientnet import EfficientNet
 from models.shufflenet import ShuffleNet
 from models.shufflenet_v2 import ShuffleNetV2
 
-from tools.dataset_loader import load_cifar10_keras
+from tools.cifar_reader import load_cifar10_keras
 from tools.model_tools import train_model
 from tools.model_tools import evaluate_model
 
