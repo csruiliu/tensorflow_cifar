@@ -23,8 +23,7 @@ from tools.model_tools import train_model
 from tools.model_tools import evaluate_model
 
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-b', '--batchsize', action='store', type=int,
@@ -121,3 +120,7 @@ if __name__ == "__main__":
         acc_avg = acc_sum / num_batch_eval
 
     print('evaluation accuracy:{}'.format(acc_avg))
+
+
+if __name__ == "__main__":
+    main()
