@@ -6,7 +6,7 @@ class MobileNet:
         self.output_classes = num_classes
         # (64, 2, 1) denotes filter 64, strides 2, repeat 1
         self.block_arch = [(32, 1, 1),
-                           (24, 2, 1),
+                           (64, 2, 1),
                            (128, 1, 1),
                            (128, 2, 1),
                            (256, 1, 1),
@@ -22,8 +22,18 @@ class MobileNet:
                         scope):
 
         with tf.variable_scope(scope):
-            x = tf.keras.layers.SeparableConv2D(filters=filters, kernel_size=3, strides=strides,
-                                                padding='same', use_bias=False)(block_input)
+            x = tf.keras.layers.SeparableConv2D(filters=filters,
+                                                kernel_size=3,
+                                                strides=strides,
+                                                padding='same',
+                                                use_bias=False)(block_input)
+            x = tf.layers.batch_normalization(x, training=True)
+            x = tf.keras.activations.relu(x)
+            x = tf.keras.layers.Conv2D(filters=filters,
+                                       kernel_size=1,
+                                       strides=1,
+                                       padding='valid',
+                                       use_bias=False)(x)
             x = tf.layers.batch_normalization(x, training=True)
             layer = tf.keras.activations.relu(x)
 
@@ -39,7 +49,9 @@ class MobileNet:
     def build(self, model_input):
         with tf.variable_scope('conv_0'):
             # Change strides to 2 for CIFAR10
-            x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1,
+            x = tf.keras.layers.Conv2D(filters=32,
+                                       kernel_size=3,
+                                       strides=1,
                                        padding='same', use_bias=False)(model_input)
             x = tf.layers.batch_normalization(x, training=True)
             x = tf.keras.activations.relu(x)
