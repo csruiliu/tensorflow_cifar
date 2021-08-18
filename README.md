@@ -60,4 +60,4 @@ The imlementation of Xception basically follows the architecture proposed in the
 
 ## ZFNet ##
 
-The imlementation of ZFNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1311.2901.pdf). ZFNet had the same architecture as AlexNet but used smaller conv kernels and strides for the first two conv layers. ***ZFNet is the champion of the ImageNet 2013. The key contribution is to visualize the model.*** 
+The imlementation of ZFNet follows the architecture proposed in the [paper](https://arxiv.org/pdf/1311.2901.pdf), but omits Layer 3 and maxpooling layer after Layer 5. ZFNet had the same architecture as AlexNet but used smaller conv kernels and strides for the first two conv layers. ***ZFNet is the champion of the ImageNet 2013. The key contribution is to visualize the model.*** 
