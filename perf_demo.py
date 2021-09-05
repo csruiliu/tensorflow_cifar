@@ -43,7 +43,7 @@ def main():
     num_epoch = args.epoch
 
     # load CNN model
-    # model = ResNet(residual_layer=18, num_classes=10)
+    model = ResNet(residual_layer=18, num_classes=10)
     # model = DenseNet(residual_layer=121, num_classes=10)
     # model = MobileNetV2(num_classes=10)
     # model = MobileNet(num_classes=10)
@@ -57,7 +57,7 @@ def main():
     # model = SqueezeNet(num_classes=10)
     # model = EfficientNet(num_classes=10)
     # model = ShuffleNet(num_groups=2, num_classes=10)
-    model = ShuffleNetV2(complexity=1, num_classes=10)
+    # model = ShuffleNetV2(complexity=1, num_classes=10)
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
@@ -79,6 +79,7 @@ def main():
         num_batch = num_feature // batch_size
         rest_feature = num_feature - batch_size * num_batch
 
+        print('============start training phrase============')
         # train the model
         for e in range(num_epoch):
             # shuffle the training data
@@ -89,7 +90,6 @@ def main():
 
             for i in range(num_batch):
                 print('epoch %d / %d, step %d / %d' % (e + 1, num_epoch, i + 1, num_batch))
-
                 batch_offset = i * batch_size
                 batch_end = (i + 1) * batch_size
                 train_feature_batch = train_feature[batch_offset:batch_end]
@@ -104,22 +104,22 @@ def main():
             else:
                 print('no train feature left for this epoch')
 
-        print('start evaluation phrase')
-        acc_sum = 0
-        eval_batch_size = 50
-        num_batch_eval = eval_label.shape[0] // eval_batch_size
-        for i in range(num_batch_eval):
-            print('evaluation step %d / %d' % (i + 1, num_batch_eval))
-            batch_offset = i * eval_batch_size
-            batch_end = (i + 1) * eval_batch_size
-            eval_feature_batch = eval_feature[batch_offset:batch_end]
-            eval_label_batch = eval_label[batch_offset:batch_end]
-            acc_batch = sess.run(eval_op, feed_dict={feature_ph: eval_feature_batch, label_ph: eval_label_batch})
-            acc_sum += acc_batch
+            print('============start evaluation phrase============')
+            acc_sum = 0
+            eval_batch_size = 50
+            num_batch_eval = eval_label.shape[0] // eval_batch_size
+            for i in range(num_batch_eval):
+                print('evaluation step %d / %d' % (i + 1, num_batch_eval))
+                batch_offset = i * eval_batch_size
+                batch_end = (i + 1) * eval_batch_size
+                eval_feature_batch = eval_feature[batch_offset:batch_end]
+                eval_label_batch = eval_label[batch_offset:batch_end]
+                acc_batch = sess.run(eval_op, feed_dict={feature_ph: eval_feature_batch, label_ph: eval_label_batch})
+                acc_sum += acc_batch
 
-        acc_avg = acc_sum / num_batch_eval
+            acc_avg = acc_sum / num_batch_eval
 
-    print('evaluation accuracy:{}'.format(acc_avg))
+        print('evaluation accuracy:{}'.format(acc_avg))
 
 
 if __name__ == "__main__":
