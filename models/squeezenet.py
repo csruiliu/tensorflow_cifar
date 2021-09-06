@@ -8,11 +8,11 @@ class SqueezeNet:
     @staticmethod
     def fire_block(block_input, filters_s1x1, filters_e1x1, filters_e3x3, scope='fire_blk'):
         with tf.variable_scope(scope):
-            x = tf.keras.layers.Conv2D(filters=filters_s1x1, kernel_size=1)(block_input)
+            x = tf.keras.layers.Conv2D(filters=filters_s1x1, kernel_size=1, padding='same')(block_input)
             bn_x = tf.layers.batch_normalization(x, training=True)
             squeeze_x = tf.keras.activations.relu(bn_x)
 
-            expand_x1 = tf.keras.layers.Conv2D(filters=filters_e1x1, kernel_size=1)(squeeze_x)
+            expand_x1 = tf.keras.layers.Conv2D(filters=filters_e1x1, kernel_size=1, padding='same')(squeeze_x)
             expand_x1 = tf.layers.batch_normalization(expand_x1, training=True)
             expand_x1 = tf.keras.activations.relu(expand_x1)
 
@@ -49,7 +49,6 @@ class SqueezeNet:
         x = tf.keras.layers.Dropout(rate=0.5)(x)
         x = tf.keras.layers.Conv2D(filters=10, kernel_size=1, padding='same')(x)
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
-
         model = self.fc_layer(x, scope='fc')
 
         return model
