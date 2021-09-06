@@ -119,7 +119,7 @@ def main():
 
             acc_avg = acc_sum / num_batch_eval
 
-        print('evaluation accuracy:{}'.format(acc_avg))
+            print('evaluation accuracy:{}'.format(acc_avg))
 
 
 if __name__ == "__main__":
