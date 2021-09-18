@@ -37,6 +37,10 @@ class Xception:
     def build(self, model_input):
         # Entry Flow
         with tf.variable_scope('entry_flow'):
+            x = tf.keras.layers.Conv2D(filters=32, kernel_size=1, strides=1, use_bias=False)(model_input)
+            x = tf.layers.batch_normalization(x)
+            x = tf.keras.activations.relu(x)
+
             x = tf.keras.layers.Conv2D(filters=64, kernel_size=1, strides=1, use_bias=False)(model_input)
             x = tf.layers.batch_normalization(x)
             x = tf.keras.activations.relu(x)
@@ -78,7 +82,7 @@ class Xception:
             x = tf.layers.batch_normalization(x)
             x = tf.keras.activations.relu(x)
 
-            x = tf.keras.layers.SeparableConv2D(1536, kernel_size=3, use_bias=False)(x)
+            x = tf.keras.layers.SeparableConv2D(2048, kernel_size=3, use_bias=False)(x)
             x = tf.layers.batch_normalization(x)
             x = tf.keras.activations.relu(x)
 
