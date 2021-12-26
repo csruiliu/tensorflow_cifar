@@ -5,7 +5,7 @@ All the models are tested on TensorFlow 1.15 and should be compatible with TF 1.
 **Run the demo for performance**
 
 ```
-python3 perf_demo.py -m <model_name> -b <batch_size> -o <optimizer> -r <learning_rate> -e <num_epoch>
+python3 perf_demo.py -m <model> -b <batch_size> -o <optimizer> -r <learning_rate> -e <num_epoch>
 
 # for example:
 # python3 perf_demo.py -m resnet -b 32 -o Momentum -r 0.0005 -e 10
