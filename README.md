@@ -2,6 +2,15 @@
 
 All the models are tested on TensorFlow 1.15 and should be compatible with TF 1.x
 
+**Run the demo for performance**
+
+```
+python3 perf_demo.py -m <model_name> -b <batch_size> -o <optimizer> -r <learning_rate> -e <num_epoch>
+
+# for example:
+# python3 perf_demo.py -m resnet -b 32 -o Momentum -r 0.0005 -e 10
+```
+
 ## AlexNet
 
 The implementation of AlexNet follows the architecture proposed in the [paper](https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf). The current hardware offering is powerful enough, so the original two GPUs version's AlexNet is usually implemented in a unified fashion. **_AlexNet won the ImageNet 2012 contest (Classification and Localization), it is the first time to apply CNN to a large scale dataset, and the eye-catching results significantly promoted the development of CNN_**
