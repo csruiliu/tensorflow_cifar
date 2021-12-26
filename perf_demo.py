@@ -26,6 +26,11 @@ from tools.model_tools import evaluate_model
 def main():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-m', '--modelname', action='store', type=str, default='resnet',
+                        choices=['lenet', 'alexnet', 'vgg', 'mobilenet', 'mobilenetv2', 'resnet', 
+                                 'zfnet', 'densenet', 'efficientnet', 'resnext', 'inception', 
+                                 'shufflenet', 'shufflenetv2', 'squeezenet', 'xception'],
+                        help='set the model arch')
     parser.add_argument('-b', '--batchsize', action='store', type=int,
                         help='set the training batch size')
     parser.add_argument('-o', '--opt', action='store', type=str,
@@ -37,27 +42,45 @@ def main():
                         help='set the number of training epoch')
 
     args = parser.parse_args()
+    model_name = args.modelname
     batch_size = args.batchsize
     opt = args.opt
     lr = args.lr
     num_epoch = args.epoch
 
     # load CNN model
-    model = ResNet(residual_layer=18, num_classes=10)
-    # model = DenseNet(residual_layer=121, num_classes=10)
-    # model = MobileNetV2(num_classes=10)
-    # model = MobileNet(num_classes=10)
-    # model = VGG(conv_layer=16, num_classes=10)
-    # model = LeNet(num_classes=10)
-    # model = Inception(num_classes=10)
-    # model = AlexNet(num_classes=10)
-    # model = ZFNet(num_classes=10)
-    # model = ResNeXt(cardinality=8, num_classes=10)
-    # model = Xception(num_classes=10)
-    # model = SqueezeNet(num_classes=10)
-    # model = EfficientNet(num_classes=10)
-    # model = ShuffleNet(num_groups=2, num_classes=10)
-    # model = ShuffleNetV2(complexity=1, num_classes=10)
+    if model_name == 'lenet':
+        model = LeNet(num_classes=10)
+    elif model_name == 'alexnet':
+        model = AlexNet(num_classes=10)
+    elif model_name == 'vgg':
+        model = VGG(conv_layer=16, num_classes=10)
+    elif model_name == 'mobilenet':
+        model = MobileNet(num_classes=10)
+    elif model_name == 'mobilenetv2':
+        model = MobileNetV2(num_classes=10)
+    elif model_name == 'resnet':
+        model = ResNet(residual_layer=18, num_classes=10)
+    elif model_name == 'zfnet':
+        model = ZFNet(num_classes=10)
+    elif model_name == 'densenet':
+        model = DenseNet(residual_layer=121, num_classes=10)
+    elif model_name == 'efficientnet':
+        model = EfficientNet(num_classes=10)
+    elif model_name == 'resnext':
+        model = ResNeXt(cardinality=8, num_classes=10)
+    elif model_name == 'inception':
+        model = Inception(num_classes=10)
+    elif model_name == 'shufflenet':
+        model = ShuffleNet(num_groups=2, num_classes=10)
+    elif model_name == 'shufflenetv2':
+       model = ShuffleNetV2(complexity=1, num_classes=10)
+    elif model_name == 'squeezenet':
+       model = SqueezeNet(num_classes=10)
+    elif model_name == 'xception':
+        model = Xception(num_classes=10)
+    else:
+        raise ValueError('not supported model name')
 
     feature_ph = tf.placeholder(tf.float32, [None, 32, 32, 3])
     label_ph = tf.placeholder(tf.int32, [None, 10])
@@ -72,14 +95,15 @@ def main():
 
     # load cifar10 dataset
     train_feature, train_label, eval_feature, eval_label = load_cifar10_keras()
-
+    
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
         num_feature = train_label.shape[0]
         num_batch = num_feature // batch_size
         rest_feature = num_feature - batch_size * num_batch
-
+        
         print('============start training phrase============')
+        
         # train the model
         for e in range(num_epoch):
             # shuffle the training data
@@ -120,7 +144,7 @@ def main():
             acc_avg = acc_sum / num_batch_eval
 
             print('evaluation accuracy:{}'.format(acc_avg))
-
+        
 
 if __name__ == "__main__":
     main()
